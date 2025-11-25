@@ -165,7 +165,7 @@ export default function Terms() {
             <a href="/home">Home</a>
             <a href="/library">Library</a>
             <a href="/content">Content</a>
-            <a href="/contacts">Contacts</a>
+            <a href="/contact">Contacts</a>
           </nav>
           <a href="/profile" className="profile-box">
             <div className="profile-icon">A</div><div>Atul Kumar</div>

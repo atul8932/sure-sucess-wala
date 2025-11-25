@@ -240,7 +240,7 @@ export default function Content() {
             <a href="/home">Home</a>
             <a href="/library">Library</a>
             <a href="/content">Content</a>
-            <a href="/contacts">Contacts</a>
+            <a href="/contact">Contacts</a>
             <a href="/courses">Courses</a>
           </nav>
 
@@ -350,7 +350,7 @@ export default function Content() {
           <p className="cta-sub">Enroll in our guided programs or request a callback — we’ll design a study plan for you.</p>
           <div className="cta-actions">
             <a className="btn-primary" href="/library">Explore Courses</a>
-            <a className="btn-outline" href="/contacts">Request Callback</a>
+            <a className="btn-outline" href="/contact">Request Callback</a>
           </div>
         </section>
       </main>
@@ -362,7 +362,7 @@ export default function Content() {
           <div className="footer-links">
             <a href="/privacy">Privacy</a>
             <a href="/terms">Terms</a>
-            <a href="/contacts">Contact</a>
+            <a href="/contact">Contact</a>
           </div>
         </div>
       </footer>

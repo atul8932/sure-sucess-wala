@@ -309,14 +309,14 @@ export default function Profile() {
             <Link to="/home">Home</Link>
             <Link to="/library">Library</Link>
             <Link to="/content">Content</Link>
-            <Link to="/contacts">Contacts</Link>
+            <Link to="/contact">Contacts</Link>
             <Link to="/courses">Courses</Link>
           </nav>
 
           <Link to="/profile" className="profile-box">
             <div className="profile-icon">S</div>
             <div>SUNIL SAURABH</div>
-          </Link>
+          </Link> 
         </div>
       </header>
 

@@ -294,7 +294,7 @@ export default function Contact() {
             <a href="/home">Home</a>
             <a href="/library">Library</a>
             <a href="/content">Content</a>
-            <a href="/contacts">Contacts</a>
+            <a href="/contact">Contacts</a>
             <a href="/courses">Courses</a>
           </nav>
 

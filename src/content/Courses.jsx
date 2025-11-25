@@ -205,7 +205,7 @@ export default function Courses() {
             <Link to="/home">Home</Link>
                   <Link to="/library">Library</Link>
                   <Link to="/content">Content</Link>
-                  <Link to="/contacts">Contacts</Link>
+                  <Link to="/contact">Contacts</Link>
                   <Link to="/courses">Courses</Link>
             
           </nav>
