@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import Navbar from "../components/Navbar";
 
 // Particle class (same lightweight one used across pages)
 class Particle {
@@ -198,23 +199,7 @@ export default function Courses() {
 
       {/* header */}
       <header className="header">
-        <div className="nav-container">
-          <Link to="/" className="logo">SURE SUCCESS WALA</Link>
-
-          <nav className="nav-links">
-            <Link to="/home">Home</Link>
-                  <Link to="/library">Library</Link>
-                  <Link to="/content">Content</Link>
-                  <Link to="/contact">Contacts</Link>
-                  <Link to="/courses">Courses</Link>
-            
-          </nav>
-
-          <Link to="/profile" className="profile-box">
-            <div className="profile-icon">S</div>
-            <div>SUNIL SAURABH</div>
-          </Link>
-        </div>
+        <Navbar />
       </header>
 
       {/* hero */}

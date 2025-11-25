@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 import DecryptedText from "../components/DecryptedText";
 import TrueFocus from "../components/TrueFocus";
+import Navbar from "../components/Navbar";
+
+
 
 class Particle {
   constructor(x, y, opts = {}) {
@@ -151,57 +153,10 @@ useEffect(() => {
         <div ref={(el) => (blobsRef.current.three = el)} className="blob-3" />
       </div>
 
-     <header className="header">
-  <div className="nav-container">
-    <Link to="/" className="logo">SURE SUCCESS WALLAH</Link>
-
-    {/* Desktop links */}
-    <nav className="nav-links" aria-label="Primary navigation">
-      <Link to="/home">Home</Link>
-      <Link to="/content">Content</Link>
-      <Link to="/library">Library</Link>
-      <Link to="/contacts">Contacts</Link>
-      <Link to="/courses">Courses</Link>
-    </nav>
-
-    {/* Profile */}
-    <Link to="/profile" className="profile-box desktop-profile">
-      <div className="profile-icon">S</div>
-      <div>Sunil Saurabh</div>
-    </Link>
-
-    {/* Hamburger (mobile) */}
-    <button
-      ref={burgerRef}
-      className={`hamburger ${mobileOpen ? "is-open" : ""}`}
-      aria-label={mobileOpen ? "Close menu" : "Open menu"}
-      aria-expanded={mobileOpen}
-      onClick={() => setMobileOpen((s) => !s)}
-    >
-      <span className="burger-line" />
-      <span className="burger-line" />
-      <span className="burger-line" />
-    </button>
-  </div>
-
-  {/* Mobile menu overlay */}
-  <div
-    ref={mobileMenuRef}
-    className={`mobile-menu ${mobileOpen ? "open" : ""}`}
-    aria-hidden={!mobileOpen}
-  >
-    <nav className="mobile-links" aria-label="Mobile navigation">
-      <Link to="/home" onClick={() => setMobileOpen(false)}>Home</Link>
-      <Link to="/content" onClick={() => setMobileOpen(false)}>Content</Link>
-      <Link to="/library" onClick={() => setMobileOpen(false)}>Library</Link>
-      <Link to="/contacts" onClick={() => setMobileOpen(false)}>Contacts</Link>
-      <Link to="/courses" onClick={() => setMobileOpen(false)}>Courses</Link>
-      <Link to="/profile" className="mobile-profile" onClick={() => setMobileOpen(false)}>
-        <div className="profile-icon">S</div> Sunil Saurabh
-      </Link>
-    </nav>
-  </div>
-</header>
+     
+     <header>
+        <Navbar />
+      </header>
 
 
 

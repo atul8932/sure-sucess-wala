@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-
+import Navbar from "../components/Navbar";
 // --- Particle class (same lightweight engine used before) ---
 class Particle {
   constructor(x, y, opts = {}) {
@@ -233,22 +233,7 @@ export default function Content() {
 
       {/* header */}
       <header className="header">
-        <div className="nav-container">
-          <a href="/" className="logo">SURE SUCCESS WALLAH</a>
-
-          <nav className="nav-links">
-            <a href="/home">Home</a>
-            <a href="/library">Library</a>
-            <a href="/content">Content</a>
-            <a href="/contact">Contacts</a>
-            <a href="/courses">Courses</a>
-          </nav>
-
-          <a href="/profile" className="profile-box">
-            <div className="profile-icon">S</div>
-            <div>SUNIL SAURABH</div>
-          </a>
-        </div>
+        <Navbar />
       </header>
 
       <main>

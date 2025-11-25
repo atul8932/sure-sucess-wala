@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
+import Navbar from "../components/Navbar";
 
-// reuse same small Particle class as Privacy.jsx
 class Particle {
   constructor(x, y, opts = {}) {
     this.x = x; this.y = y;
@@ -159,18 +159,7 @@ export default function Terms() {
       </div>
 
       <header className="header">
-        <div className="nav-container">
-          <a href="/" className="logo">SureSuccessWallah</a>
-          <nav className="nav-links">
-            <a href="/home">Home</a>
-            <a href="/library">Library</a>
-            <a href="/content">Content</a>
-            <a href="/contact">Contacts</a>
-          </nav>
-          <a href="/profile" className="profile-box">
-            <div className="profile-icon">A</div><div>Atul Kumar</div>
-          </a>
-        </div>
+        <Navbar />
       </header>
 
       <main>
