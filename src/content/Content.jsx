@@ -191,13 +191,17 @@ export default function Content() {
   const featuredVideos = [
     { id: "vid1", title: "compound Interest", url: "https://youtu.be/OTMq35xVCRY?si=UmZHijoz5YdoB7w0" },
     { id: "vid2", title: "Units and Dimension", url: "https://youtu.be/azpdOT4de-4?si=BUtlpcVi4xEIPkoF" },
-    { id: "vid3", title: "Ratio and proportion", url: "https://youtu.be/6TkdRVg9FbQ?si=18H6bpBeSbCZK6os" }
+    { id: "vid3", title: "Ratio and proportion", url: "https://youtu.be/6TkdRVg9FbQ?si=18H6bpBeSbCZK6os" },
+    { id: "vid4", title: "Bihar Current Affairs", url: "https://youtu.be/6qNzx7-BGW0?si=Mi4Rj273Fdo5xBgD" },
+    { id: "vid5", title: "East India Company & Nawabs of bengal", url: "https://youtu.be/67rqIuhtFOE?si=hyrCi-5gdxQTzBB8" },
   ];
 
   // IMPORTANT: place pdfs in public/pdfs so these URLs work in production
   const pdfResources = [
     { id: "pdf1", title: "Results-71stCCE (Pre)-CCE", href: "/pdfs/pdf1.pdf" },
     { id: "pdf2", title: "Measuring devices and scales", href: "/pdfs/pdf2.pdf" },
+    { id: "pdf3", title: "OMR sheet of SURE SUCCESSWALLAH", href: "/pdfs/pdf3.pdf" },
+    
   ];
 
   const freeVideos = {
@@ -210,6 +214,7 @@ export default function Content() {
     "Optional Subjects": [
       { title:"📐 Mathematics", url: "https://youtube.com/playlist?list=PLSW3a2j7LFD8V965fTqZb_3P7zFvcyCU1&si=nDWA0I58EAvDqyAd" },
     ]
+    
   };
 
   return (
@@ -357,7 +362,7 @@ export default function Content() {
           <div className="footer-links">
             <a href="/privacy">Privacy</a>
             <a href="/terms">Terms</a>
-            <a href="/contact">Contact</a>
+            <a href="/contacts">Contact</a>
           </div>
         </div>
       </footer>
@@ -418,8 +423,8 @@ export default function Content() {
 
         .categories-grid { max-width:1200px; margin:auto; display:grid; grid-template-columns: repeat(3,1fr); gap:18px; }
         .category-card { background: rgba(30,41,59,0.45); padding:14px; border-radius:10px; border:1px solid rgba(255,255,255,0.04); }
-        .category-title { font-weight:700; margin-bottom:8px; }
-        .category-list { list-style:none; padding-left:0; margin:0; font-size:14px; }
+        .category-title { font-weight:700; margin-bottom:8px; font-size:18px; }
+        .category-list { list-style:none; padding-left:0; margin:0; font-size:25px; }
         .category-list li { margin:8px 0; }
         .category-list a { color:#cbd5e1; text-decoration:none; }
         .category-list a:hover { color:#818cf8; }

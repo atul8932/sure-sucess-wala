@@ -255,44 +255,10 @@ export default function Library() {
           ))}
         </div>
       </section>
-
-      {/* Course Grid */}
-      <section className="library-grid-section">
-        <h3 className="section-title">Available Courses</h3>
-
-        <div className="library-course-grid">
-          {Array.from({ length: 9 }).map((_, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4 }}
-              className="library-course-card"
-            >
-              <div className="library-card-thumb">📘</div>
-
-              <div className="library-card-body">
-                <h4 className="library-card-title">Course Title {i + 1}</h4>
-                <p className="library-card-desc">
-                  A short description about the course. Replace this with real content later.
-                </p>
-
-                <div className="library-card-meta">
-                  <span>🔥 4.8</span>
-                  <span>•</span>
-                  <span>12 Modules</span>
-                </div>
-
-                <div className="library-card-links">
-                  <a href="/content" className="card-link-view">View</a>
-                  <a href="/library" className="card-link-enroll">Enroll</a>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </section>
+    {/*AvailableCourses*/}
+    <section className="library-grid-section">
+        <h3 className="section-title">coming soon</h3>
+        </section>
 
       {/* Footer */}
       <footer className="footer">
@@ -503,6 +469,7 @@ export default function Library() {
         grid-template-columns: repeat(3,1fr);
         gap: 22px;
         padding: 0 20px;
+        justify-items: center;
       }
 
       .library-course-card {
@@ -521,7 +488,6 @@ export default function Library() {
       .library-card-links { margin-top:12px; display:flex; gap:12px; }
 
       .card-link-view { color:#818cf8; text-decoration:none; font-weight:600; }
-      .card-link-enroll { color:#94a3b8; text-decoration:none; }
 
       /* footer */
       .footer { border-top:1px solid rgba(255,255,255,0.06); padding:28px 0; background: rgba(0,0,0,0.15); }

@@ -251,8 +251,7 @@ export default function Courses() {
               </div>
 
               <div className="course-links">
-                <Link to="/content" className="view-link">View Details</Link>
-                <a href="#" className="enroll-link">Enroll Now</a>
+                <Link to="/content" className="view-link">Coming Soon...</Link>
               </div>
             </motion.div>
           ))}
@@ -371,7 +370,6 @@ export default function Courses() {
 .course-meta { margin-top:10px; color:#cbd5e1; font-size:13px; display:flex; gap:8px; align-items:center; }
 .course-links { margin-top:14px; display:flex; gap:18px; }
 .view-link { color:#818cf8; font-weight:600; text-decoration:none; }
-.enroll-link { color:#94a3b8; text-decoration:none; }
 
 /* footer */
 .footer { padding:40px 0; border-top:1px solid rgba(255,255,255,0.08); margin-top:40px; }

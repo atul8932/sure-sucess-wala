@@ -4,9 +4,6 @@ import { Link } from "react-router-dom";
 import DecryptedText from "../components/DecryptedText";
 import TrueFocus from "../components/TrueFocus";
 
-
-
-
 class Particle {
   constructor(x, y, opts = {}) {
     this.x = x;
@@ -111,6 +108,9 @@ export default function Home() {
 
   const fade = { hidden: { y: 20, opacity: 0 }, visible: { y: 0, opacity: 1 } };
 
+  // Path to uploaded image (as requested)
+  const logoPath = "/pdfs/logo.png";
+
   return (
     <div className="page-container">
 
@@ -134,8 +134,9 @@ export default function Home() {
 
     <nav className="nav-links">
       <Link to="/home">Home</Link>
-      <Link to="/library">Library</Link>
       <Link to="/content">Content</Link>
+      <Link to="/library">Library</Link>
+      
       <Link to="/contacts">Contacts</Link>
       <Link to="/courses">Courses</Link>
     </nav>
@@ -198,11 +199,14 @@ export default function Home() {
             className="hero-right"
           >
             <div className="hero-card">
-              <div className="hero-card-inner">
-                🎓
-                <div className="hero-card-title">Interactive Learning Hub</div>
-                <div className="hero-card-desc">
-                  Live classes, quizzes, and progress reports.
+              {/* The logo is injected via CSS (see styles below). */}
+              <div className="hero-card-inner with-logo">
+                <div className="hero-card-content">
+                  🎓
+                  <div className="hero-card-title"></div>
+                  <div className="hero-card-desc">
+                    .
+                  </div>
                 </div>
               </div>
             </div>
@@ -281,6 +285,7 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
       <style>{`
 /* --------------------------------------------------------
    GLOBAL STYLES
@@ -552,17 +557,50 @@ export default function Home() {
   padding: 20px;
   border: 1px solid rgba(140,120,255,0.14);
   box-shadow: 0 18px 60px rgba(0,0,0,0.5);
+  background: rgba(30,41,59,0.4);
 }
 
+/* --- UPDATED: hero-card-inner now shows the uploaded logo behind content --- */
 .hero-card-inner {
+  position: relative;
   aspect-ratio: 4/3;
   border-radius: 16px;
-  background: linear-gradient(135deg, rgba(99,102,241,0.22), rgba(79,70,229,0.18));
+  overflow: hidden;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: 78px;
+  padding: 18px;
+  background: linear-gradient(135deg, rgba(99,102,241,0.12), rgba(79,70,229,0.06));
+}
+
+/* This pseudo element places the logo image behind the content.
+   Uses the local path you provided. Increase opacity to make it clearly visible. */
+.hero-card-inner.with-logo::before {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  background-image: url("${logoPath}");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain; /* contain ensures whole logo is visible */
+  opacity: 0.98; /* strong visibility */
+  filter: drop-shadow(0 8px 30px rgba(0,0,0,0.6)) saturate(110%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Card content sits above the logo */
+.hero-card-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  color: #fff;
+  mix-blend-mode: normal;
+}
+
+/* Slightly reduce emoji size so logo remains prominent */
+.hero-card-content > :first-child {
+  font-size: 56px;
 }
 
 .hero-card-title {
@@ -573,7 +611,7 @@ export default function Home() {
 
 .hero-card-desc {
   font-size: 14px;
-  opacity: 0.8;
+  opacity: 0.95;
 }
 
 .hero-card-features {

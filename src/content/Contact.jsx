@@ -1,8 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import emailjs from "emailjs-com"; // npm i emailjs-com
 
-// Small Particle engine
+// Small Particle engine (kept from your previous file)
 class Particle {
   constructor(x, y, opts = {}) {
     this.x = x; this.y = y;
@@ -44,11 +43,6 @@ export default function Contact() {
   const cursorOuterRef = useRef(null);
   const cursorInnerRef = useRef(null);
   const lerpRef = useRef({ x: -9999, y: -9999 });
-
-  // IMPORTANT: replace YOUR_PUBLIC_KEY with the EmailJS public key from your EmailJS dashboard
-  useEffect(() => {
-    emailjs.init("iR87V_FGpRuPsSDZx"); // <-- paste your public key here
-  }, []);
 
   // Canvas & particle loop
   useEffect(() => {
@@ -172,33 +166,115 @@ export default function Contact() {
     };
   }, []);
 
-  // Form submit handler — EmailJS (client-only)
-  const onSubmit = (e) => {
+  // Helper: fetch public IP (optional) — returns "n/a" on failure
+  const fetchClientIP = async () => {
+    try {
+      const res = await fetch("https://api.ipify.org?format=json");
+      const j = await res.json();
+      return j.ip || "n/a";
+    } catch {
+      return "n/a";
+    }
+  };
+
+  // Escape helper to avoid accidental HTML injection
+  function escapeHtml(unsafe) {
+    return String(unsafe || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  // Your Google Apps Script web app URL (you provided)
+  const GAS_URL = "https://script.google.com/macros/s/AKfycby_Hop8aMyWKkW8ItX7tAusO53a5VBJk0NVjiW6Ig1Iu6UUBT38KwlP2rHvuJDOduxG/exec";
+
+  // Local uploaded image path (developer-provided). Hosting/tooling will turn it into a URL.
+  const logo_url = "/mnt/data/Screenshot from 2025-11-25 15-21-04.png";
+
+  // Full form submit handler that builds a message_html and posts to GAS
+  const onSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
-    const data = {
-      to_email: "atulkumar54123@gmail.com",
-      from_name: form.name?.value || "",
-      from_email: form.email?.value || "",
-      phone: form.phone?.value || "",
-      message: form.message?.value || "",
-      callback: form.callback?.checked ? "Yes" : "No",
-      reason: form.reason?.value || ""
+
+    const user_name = (form.name?.value || "").trim();
+    const user_email = (form.email?.value || "").trim();
+    const user_phone = (form.phone?.value || "").trim();
+    const enquiry_type = (form.reason?.value || "General enquiry").trim();
+    const user_message = (form.message?.value || "").trim();
+    const request_callback = form.callback?.checked ? "Yes" : "No";
+
+    // Environment info
+    const user_os = navigator.platform || "Unknown";
+    const user_browser = navigator.userAgent || "Unknown";
+    const user_version = navigator.appVersion || "Unknown";
+    const user_platform = navigator.userAgentData?.platform || navigator.platform || "Unknown";
+    const user_referrer = document.referrer || window.location.href || "Unknown";
+
+    // Try to fetch IP (optional)
+    const user_ip = await fetchClientIP();
+
+    // Build HTML block (the Apps Script can use this raw HTML)
+    const message_html = `
+      <h2 style="font-family:Arial,Helvetica,sans-serif;color:#111;margin:0 0 12px">New contact request — Sure Success Wallah</h2>
+      <table style="width:100%;border-collapse:collapse;font-family:Arial,Helvetica,sans-serif;margin-bottom:12px">
+        <tr><td style="padding:8px;border:1px solid #eee;font-weight:700;width:160px">Name</td><td style="padding:8px;border:1px solid #eee">${escapeHtml(user_name)}</td></tr>
+        <tr><td style="padding:8px;border:1px solid #eee;font-weight:700">Email</td><td style="padding:8px;border:1px solid #eee">${escapeHtml(user_email)}</td></tr>
+        <tr><td style="padding:8px;border:1px solid #eee;font-weight:700">Phone</td><td style="padding:8px;border:1px solid #eee">${escapeHtml(user_phone)}</td></tr>
+        <tr><td style="padding:8px;border:1px solid #eee;font-weight:700">Enquiry</td><td style="padding:8px;border:1px solid #eee">${escapeHtml(enquiry_type)}</td></tr>
+        <tr><td style="padding:8px;border:1px solid #eee;font-weight:700">Callback Requested</td><td style="padding:8px;border:1px solid #eee">${escapeHtml(request_callback)}</td></tr>
+        <tr><td style="padding:8px;border:1px solid #eee;font-weight:700;vertical-align:top">Message</td><td style="padding:8px;border:1px solid #eee">${escapeHtml(user_message).replace(/\n/g,'<br/>')}</td></tr>
+      </table>
+
+      <h4 style="margin:12px 0 8px;font-family:Arial,Helvetica,sans-serif">Environment & meta</h4>
+      <ul style="font-family:Arial,Helvetica,sans-serif;color:#333;padding-left:18px;margin:0">
+        <li><strong>OS:</strong> ${escapeHtml(user_os)}</li>
+        <li><strong>Platform:</strong> ${escapeHtml(user_platform)}</li>
+        <li><strong>Browser UA:</strong> ${escapeHtml(user_browser)}</li>
+        <li><strong>App version:</strong> ${escapeHtml(user_version)}</li>
+        <li><strong>Referrer / Page:</strong> ${escapeHtml(user_referrer)}</li>
+        <li><strong>IP:</strong> ${escapeHtml(user_ip)}</li>
+      </ul>
+    `;
+
+    const payload = {
+      user_name,
+      user_email,
+      user_phone,
+      enquiry_type,
+      user_message,
+      request_callback,
+      user_os,
+      user_platform,
+      user_browser,
+      user_version,
+      user_referrer,
+      user_ip,
+      message_html,
+      logo_url
     };
 
-    // real values you gave:
-    const SERVICE_ID = "service_7m1nruk";
-    const TEMPLATE_ID = "template_qvnx7bb";
-
-    emailjs.send(SERVICE_ID, TEMPLATE_ID, data)
-      .then(() => {
-        alert(`Thanks ${data.from_name || "there"}! Your message has been emailed successfully.`);
-        form.reset();
-      })
-      .catch((err) => {
-        console.error("EmailJS error:", err);
-        alert("Failed to send message. Please check console or try again.");
+    try {
+      const res = await fetch(GAS_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
       });
+
+      const json = await res.json().catch(()=>({ ok: res.ok }));
+      if (!res.ok && !json.ok) {
+        console.error("GAS error response:", json);
+        alert("Failed to send message. Check console for details.");
+        return;
+      }
+
+      alert(`Thanks ${user_name || "there"}! Your message has been sent.`);
+      form.reset();
+    } catch (err) {
+      console.error("send error", err);
+      alert("Failed to send message. Check console.");
+    }
   };
 
   return (
@@ -300,7 +376,7 @@ export default function Contact() {
               </div>
 
               <div className="note">
-                Emails will be sent via EmailJS (service_7m1nruk / template_qvnx7bb). Make sure you replaced <code>YOUR_PUBLIC_KEY</code> above.
+                This form sends data to your Google Apps Script Web App. All fields plus environment info (OS, browser, IP) are submitted.
               </div>
             </form>
           </div>
@@ -319,7 +395,7 @@ export default function Contact() {
         </div>
       </footer>
 
-      {/* Inline styles (same as before) */}
+      {/* Inline styles (updated to fix overlapping borders + focus) */}
       <style>{`
       @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
 
@@ -366,8 +442,32 @@ export default function Contact() {
       .section-title { font-size:28px; font-weight:800; text-align:center; margin-bottom:16px; }
 
       .contact-form { background: rgba(20,20,30,0.45); padding:20px; border-radius:12px; border:1px solid rgba(255,255,255,0.04); }
-      .form-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
-      .input { width:100%; padding:12px 14px; border-radius:10px; border:1px solid rgba(255,255,255,0.06); background: rgba(10,10,15,0.6); color:#e2e8f0; outline:none; }
+      /* Increased gap to avoid border touching and ensured proper box-sizing */
+      .form-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:12px; align-items:center; }
+
+      /* CORE FIXES: make sure borders don't visually overlap,
+         use background-clip to keep background inside rounded corners,
+         box-sizing so widths behave consistently. */
+      .input {
+        width:100%;
+        box-sizing: border-box;
+        padding:12px 14px;
+        border-radius:10px;
+        border:1px solid rgba(255,255,255,0.08);
+        background: rgba(10,10,15,0.62);
+        color:#e2e8f0;
+        outline:none;
+        background-clip: padding-box;
+        -webkit-background-clip: padding-box;
+        transition: box-shadow 0.12s ease, transform 0.08s ease;
+      }
+
+      .input:focus {
+        box-shadow: 0 6px 24px rgba(99,102,241,0.12);
+        border-color: rgba(129,140,248,0.9);
+        transform: translateY(-1px);
+      }
+
       .textarea { resize:none; min-height:120px; margin-bottom:12px; }
 
       .callback-row { display:flex; gap:10px; align-items:center; color:#d1d5db; margin-bottom:12px; }
@@ -384,7 +484,7 @@ export default function Contact() {
 
       @media (max-width: 900px) {
         .nav-links { display: none; }
-        .form-row { grid-template-columns: 1fr; }
+        .form-row { grid-template-columns: 1fr; gap:12px; }
         .contact-info-cards { flex-direction:column; align-items:center; }
         .contact-title { font-size:28px; }
       }
