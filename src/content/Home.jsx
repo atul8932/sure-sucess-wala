@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import DecryptedText from "../components/DecryptedText";
@@ -110,6 +110,29 @@ export default function Home() {
 
   // Path to uploaded image (as requested)
   const logoPath = "/pdfs/logo.png";
+  const [mobileOpen, setMobileOpen] = useState(false);
+const mobileMenuRef = useRef(null);
+const burgerRef = useRef(null);
+
+
+useEffect(() => {
+  const onDocClick = (e) => {
+    if (!mobileOpen) return;
+    const menu = mobileMenuRef.current;
+    const burger = burgerRef.current;
+    if (menu && !menu.contains(e.target) && burger && !burger.contains(e.target)) {
+      setMobileOpen(false);
+    }
+  };
+  const onEsc = (e) => { if (e.key === "Escape") setMobileOpen(false); };
+  document.addEventListener("click", onDocClick);
+  document.addEventListener("keydown", onEsc);
+  return () => {
+    document.removeEventListener("click", onDocClick);
+    document.removeEventListener("keydown", onEsc);
+  };
+}, [mobileOpen]);
+
 
   return (
     <div className="page-container">
@@ -132,19 +155,51 @@ export default function Home() {
   <div className="nav-container">
     <Link to="/" className="logo">SURE SUCCESS WALLAH</Link>
 
-    <nav className="nav-links">
+    {/* Desktop links */}
+    <nav className="nav-links" aria-label="Primary navigation">
       <Link to="/home">Home</Link>
       <Link to="/content">Content</Link>
       <Link to="/library">Library</Link>
-      
-      <Link to="/contact">Contacts</Link>
+      <Link to="/contacts">Contacts</Link>
       <Link to="/courses">Courses</Link>
     </nav>
 
-    <Link to="/profile" className="profile-box">
+    {/* Profile */}
+    <Link to="/profile" className="profile-box desktop-profile">
       <div className="profile-icon">S</div>
       <div>Sunil Saurabh</div>
     </Link>
+
+    {/* Hamburger (mobile) */}
+    <button
+      ref={burgerRef}
+      className={`hamburger ${mobileOpen ? "is-open" : ""}`}
+      aria-label={mobileOpen ? "Close menu" : "Open menu"}
+      aria-expanded={mobileOpen}
+      onClick={() => setMobileOpen((s) => !s)}
+    >
+      <span className="burger-line" />
+      <span className="burger-line" />
+      <span className="burger-line" />
+    </button>
+  </div>
+
+  {/* Mobile menu overlay */}
+  <div
+    ref={mobileMenuRef}
+    className={`mobile-menu ${mobileOpen ? "open" : ""}`}
+    aria-hidden={!mobileOpen}
+  >
+    <nav className="mobile-links" aria-label="Mobile navigation">
+      <Link to="/home" onClick={() => setMobileOpen(false)}>Home</Link>
+      <Link to="/content" onClick={() => setMobileOpen(false)}>Content</Link>
+      <Link to="/library" onClick={() => setMobileOpen(false)}>Library</Link>
+      <Link to="/contacts" onClick={() => setMobileOpen(false)}>Contacts</Link>
+      <Link to="/courses" onClick={() => setMobileOpen(false)}>Courses</Link>
+      <Link to="/profile" className="mobile-profile" onClick={() => setMobileOpen(false)}>
+        <div className="profile-icon">S</div> Sunil Saurabh
+      </Link>
+    </nav>
   </div>
 </header>
 
@@ -749,6 +804,111 @@ export default function Home() {
   text-align: center;
   padding: 80px 0;
 }
+
+/* ---------- Mobile nav / hamburger ---------- */
+
+.hamburger {
+  display: none; /* shown only on small screens via media query below */
+  width: 44px;
+  height: 40px;
+  border-radius: 10px;
+  border: none;
+  background: rgba(255,255,255,0.03);
+  backdrop-filter: blur(6px);
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  z-index: 80;
+  position: relative;
+}
+
+.hamburger:focus { outline: 2px solid rgba(129,140,248,0.6); }
+
+.burger-line {
+  display: block;
+  width: 20px;
+  height: 2px;
+  margin: 4px 0;
+  background: #e6e9f6;
+  border-radius: 2px;
+  transition: transform .18s ease, opacity .12s ease;
+}
+
+/* animate when open */
+.hamburger.is-open .burger-line:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.hamburger.is-open .burger-line:nth-child(2) { opacity: 0; transform: scaleX(0.2); }
+.hamburger.is-open .burger-line:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+/* mobile menu overlay */
+.mobile-menu {
+  position: fixed;
+  inset: 0 0 auto 0;
+  top: 64px; /* slides from under header; adjust if header height changes */
+  left: 0;
+  right: 0;
+  z-index: 75;
+  transform-origin: top center;
+  transform: translateY(-8px) scaleY(0.98);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .18s ease, transform .18s ease;
+  background: linear-gradient(180deg, rgba(12,14,22,0.96), rgba(13,16,28,0.98));
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+  padding: 18px;
+}
+
+/* open state */
+.mobile-menu.open {
+  transform: translateY(0) scaleY(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* mobile links */
+.mobile-links {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 420px;
+  margin: 10px auto 20px;
+  text-align: left;
+}
+.mobile-links a {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 14px;
+  color: #e6eefc;
+  text-decoration: none;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: background .12s ease;
+}
+.mobile-links a:hover {
+  background: rgba(129,140,248,0.08);
+  color: #fff;
+}
+.mobile-profile { margin-top: 8px; display:flex; align-items:center; }
+
+/* hide desktop profile inside header on small screens so mobile profile shows in menu */
+.desktop-profile { display: flex; align-items:center; gap:10px; }
+
+/* ---------- Responsive rules ---------- */
+@media (max-width: 900px) {
+  /* hide desktop nav, show hamburger */
+  .nav-links { display: none !important; }
+  .desktop-profile { display: none !important; }
+  .hamburger { display: inline-flex; }
+  /* ensure header items stay aligned */
+  .nav-container { gap: 12px; padding: 12px 18px; }
+  /* make header slightly taller on mobile if needed */
+  .header { padding: 6px 0; }
+  /* mobile menu sits below header; adjust top offset if header uses sticky + different height */
+  .mobile-menu { top: 56px; }
+}
+
 
 .cta-title {
   font-size: 32px;
